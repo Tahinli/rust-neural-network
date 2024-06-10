@@ -1,41 +1,37 @@
-use crate::activation::Activation;
+use crate::{axon::Axon, axon_terminal::AxonTerminal};
 
 pub struct Neuron {
-    calculated_value: f64,
-    activation: Activation,
+    axon: Axon,
+    axon_terminal: AxonTerminal,
 }
 
 impl Neuron {
     pub fn new() -> Self {
         Neuron {
-            calculated_value: 0.0,
-            activation: Activation::new(),
+            axon: Axon::new(),
+            axon_terminal: AxonTerminal::new(),
         }
     }
 
-    pub fn set(&mut self, coefficient_a: f64, variable: f64, coefficient_b: f64) {
-        self.activation.set(coefficient_a, variable, coefficient_b);
+    pub fn set(&mut self, weight: f64, bias: f64) {
+        self.axon.set(weight, bias);
     }
 
-    pub fn activate(&mut self) -> f64 {
-        self.calculated_value = self.activation.calculate();
-        self.calculated_value
+    pub fn use_electro_signal(&mut self, variable: f64) -> f64 {
+        let calculated_value = self.axon.transmit(variable);
+        self.axon_terminal.generate_voltage(calculated_value)
     }
 
-    fn set_coefficient_a(&mut self, coefficient_a: f64) {
-        self.activation.set_coefficient_a(coefficient_a);
+    fn set_weight(&mut self, weight: f64) {
+        self.axon.set_weight(weight);
     }
 
-    pub fn set_variable(&mut self, variable: f64) {
-        self.activation.set_variable(variable);
-    }
-
-    fn set_coefficient_b(&mut self, coefficient_b: f64) {
-        self.activation.set_coefficient_b(coefficient_b);
+    fn set_bias(&mut self, bias: f64) {
+        self.axon.set_bias(bias);
     }
 
     pub fn recalculate_coefficients(&mut self, loss: f64) {
-        self.set_coefficient_a(todo!());
-        self.set_coefficient_b(todo!())
+        self.set_weight(todo!());
+        self.set_bias(todo!())
     }
 }
