@@ -1,8 +1,10 @@
 use crate::{axon::Axon, axon_terminal::AxonTerminal};
 
+#[derive(Debug)]
 pub struct Neuron {
     axon: Axon,
     axon_terminal: AxonTerminal,
+    signal: f64,
 }
 
 impl Neuron {
@@ -10,6 +12,7 @@ impl Neuron {
         Neuron {
             axon: Axon::new(),
             axon_terminal: AxonTerminal::new(),
+            signal: 0.0,
         }
     }
 
@@ -17,9 +20,9 @@ impl Neuron {
         self.axon.set(weight, bias);
     }
 
-    pub fn use_electro_signal(&mut self, variable: f64) -> f64 {
-        let calculated_value = self.axon.transmit(variable);
-        self.axon_terminal.generate_voltage(calculated_value)
+    pub fn use_electro_signal(&mut self, input: f64) {
+        let calculated_value = self.axon.transmit(input);
+        self.signal = self.axon_terminal.generate_voltage(calculated_value);
     }
 
     fn set_weight(&mut self, weight: f64) {
@@ -28,6 +31,10 @@ impl Neuron {
 
     fn set_bias(&mut self, bias: f64) {
         self.axon.set_bias(bias);
+    }
+
+    pub fn get_signal(&self) -> f64 {
+        self.signal
     }
 
     pub fn recalculate_coefficients(&mut self, loss: f64) {

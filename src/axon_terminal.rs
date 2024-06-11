@@ -1,5 +1,5 @@
 use std::f64::consts::E;
-
+#[derive(Debug)]
 pub struct AxonTerminal {}
 
 impl AxonTerminal {
