@@ -25,6 +25,11 @@ impl Neuron {
         self.signal = self.axon_terminal.generate_voltage(calculated_value);
     }
 
+    pub fn collect_electro_signal(&mut self, input: f64) {
+        let calculated_value = self.axon.transmit(input);
+        self.signal += self.axon_terminal.generate_voltage(calculated_value);
+    }
+
     fn set_weight(&mut self, weight: f64) {
         self.axon.set_weight(weight);
     }

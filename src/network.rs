@@ -39,7 +39,7 @@ impl NeuralNetwork {
         for hidden_layer in self.hidden_layers.iter_mut() {
             for neuron in hidden_layer.iter_mut() {
                 for input_neuron in input_layer.iter() {
-                    neuron.use_electro_signal(input_neuron.get_signal())
+                    neuron.collect_electro_signal(input_neuron.get_signal())
                 }
             }
             input_layer = hidden_layer;
