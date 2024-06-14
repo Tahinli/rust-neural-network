@@ -14,12 +14,24 @@ impl NeuralLayer {
     pub fn push_neuron(&mut self, neuron: Neuron) {
         self.neural_layer.push(neuron);
     }
+}
 
-    pub fn iter(&self) -> std::slice::Iter<Neuron> {
+impl<'a> IntoIterator for &'a NeuralLayer {
+    type Item = &'a Neuron;
+
+    type IntoIter = std::slice::Iter<'a, Neuron>;
+
+    fn into_iter(self) -> Self::IntoIter {
         self.neural_layer.iter()
     }
+}
 
-    pub fn iter_mut(&mut self) -> std::slice::IterMut<Neuron> {
+impl<'a> IntoIterator for &'a mut NeuralLayer {
+    type Item = &'a mut Neuron;
+
+    type IntoIter = std::slice::IterMut<'a, Neuron>;
+
+    fn into_iter(self) -> Self::IntoIter {
         self.neural_layer.iter_mut()
     }
 }
