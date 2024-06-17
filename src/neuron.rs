@@ -1,49 +1,53 @@
-use crate::{axon::Axon, axon_terminal::AxonTerminal};
+use crate::{
+    axon::Axon, axon_terminal::AxonTerminal, dendrite::Dendrite, signal::Signal, soma::Soma,
+};
 
 #[derive(Debug)]
 pub struct Neuron {
+    dendrites: Vec<Dendrite>,
+    soma: Soma,
     axon: Axon,
-    axon_terminal: AxonTerminal,
-    signal: f64,
+    axon_terminals: Vec<AxonTerminal>,
 }
 
 impl Neuron {
     pub fn new() -> Self {
         Neuron {
+            dendrites: vec![],
+            soma: Soma::new(),
             axon: Axon::new(),
-            axon_terminal: AxonTerminal::new(),
-            signal: 0.0,
+            axon_terminals: vec![],
         }
     }
 
-    pub fn set(&mut self, weight: f64, bias: f64) {
-        self.axon.set(weight, bias);
+    pub fn activate(&mut self, other_dendrites: &mut Vec<Dendrite>) -> Option<Signal> {
+        Neuron::collect_signals(&mut self.axon_terminals, other_dendrites);
+        match self.axon.consume_signal() {
+            Some(signal) => {
+                self.soma.activate(signal);
+                self.soma.consume_signal()
+            }
+            None => None,
+        }
     }
 
-    pub fn use_electro_signal(&mut self, input: f64) {
-        let calculated_value = self.axon.transmit(input);
-        self.signal = self.axon_terminal.generate_voltage(calculated_value);
+    pub fn transmission(&mut self) -> &mut Vec<Dendrite> {
+        &mut self.dendrites
     }
 
-    pub fn collect_electro_signal(&mut self, input: f64) {
-        let calculated_value = self.axon.transmit(input);
-        self.signal += self.axon_terminal.generate_voltage(calculated_value);
-    }
-
-    fn set_weight(&mut self, weight: f64) {
-        self.axon.set_weight(weight);
-    }
-
-    fn set_bias(&mut self, bias: f64) {
-        self.axon.set_bias(bias);
-    }
-
-    pub fn get_signal(&self) -> f64 {
-        self.signal
-    }
-
-    pub fn recalculate_coefficients(&mut self, loss: f64) {
-        self.set_weight(todo!());
-        self.set_bias(todo!())
+    fn collect_signals(
+        axon_terminals: &mut Vec<AxonTerminal>,
+        other_dendrites: &mut Vec<Dendrite>,
+    ) {
+        for (other_dendrite, axon_terminal) in
+            other_dendrites.iter_mut().zip(axon_terminals.iter_mut())
+        {
+            match other_dendrite.consume_signal() {
+                Some(signal) => {
+                    axon_terminal.receive_signal(signal);
+                }
+                None => return,
+            }
+        }
     }
 }

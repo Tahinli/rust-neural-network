@@ -1,38 +1,24 @@
+use crate::signal::Signal;
+
 #[derive(Debug)]
 pub struct Axon {
-    weight: f64,
-    bias: f64,
+    signals: Vec<Signal>,
 }
 
 impl Axon {
     pub fn new() -> Self {
-        Axon {
-            weight: 1.0,
-            bias: 0.0,
+        Axon { signals: vec![] }
+    }
+
+    pub fn consume_signal(&mut self) -> Option<Signal> {
+        if self.signals.is_empty() {
+            None
+        } else {
+            let mut combined_signal = Signal::new();
+            while !self.signals.is_empty() {
+                combined_signal.combine(self.signals.pop().unwrap());
+            }
+            Some(combined_signal)
         }
-    }
-
-    pub fn get(&self) -> Self {
-        Axon {
-            weight: self.weight,
-            bias: self.bias,
-        }
-    }
-
-    pub fn set(&mut self, weight: f64, bias: f64) {
-        self.weight = weight;
-        self.bias = bias;
-    }
-
-    pub fn transmit(&self, input: f64) -> f64 {
-        self.weight * input + self.bias
-    }
-
-    pub fn set_weight(&mut self, weight: f64) {
-        self.weight = weight;
-    }
-
-    pub fn set_bias(&mut self, bias: f64) {
-        self.bias = bias;
     }
 }
