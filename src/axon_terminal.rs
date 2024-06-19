@@ -23,3 +23,9 @@ impl AxonTerminal {
         }
     }
 }
+
+impl Default for AxonTerminal {
+    fn default() -> Self {
+        Self::new()
+    }
+}

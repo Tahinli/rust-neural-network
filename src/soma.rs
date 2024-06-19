@@ -37,3 +37,9 @@ impl Soma {
         self.bias = bias;
     }
 }
+
+impl Default for Soma {
+    fn default() -> Self {
+        Self::new()
+    }
+}

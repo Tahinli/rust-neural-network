@@ -23,3 +23,9 @@ impl Signal {
         self.signal_value
     }
 }
+
+impl Default for Signal {
+    fn default() -> Self {
+        Self::new()
+    }
+}

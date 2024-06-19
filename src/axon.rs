@@ -15,10 +15,16 @@ impl Axon {
             None
         } else {
             let mut combined_signal = Signal::new();
-            while !self.signals.is_empty() {
-                combined_signal.combine(self.signals.pop().unwrap());
+            while let Some(element) = self.signals.pop() {
+                combined_signal.combine(element);
             }
             Some(combined_signal)
         }
+    }
+}
+
+impl Default for Axon {
+    fn default() -> Self {
+        Self::new()
     }
 }

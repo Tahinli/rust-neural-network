@@ -35,3 +35,9 @@ impl<'a> IntoIterator for &'a mut NeuralLayer {
         self.neural_layer.iter_mut()
     }
 }
+
+impl Default for NeuralLayer {
+    fn default() -> Self {
+        Self::new()
+    }
+}

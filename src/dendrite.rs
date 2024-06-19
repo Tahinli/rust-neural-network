@@ -30,3 +30,9 @@ impl Dendrite {
         self.weight = weight;
     }
 }
+
+impl Default for Dendrite {
+    fn default() -> Self {
+        Self::new()
+    }
+}
