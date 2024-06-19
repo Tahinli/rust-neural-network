@@ -37,10 +37,12 @@ impl NeuralNetwork {
     fn forward(&mut self) {
         let mut input_layer = &mut self.input_layer;
         for hidden_layer in self.hidden_layers.iter_mut() {
-            for neuron in hidden_layer.into_iter() {
+            for (index, neuron) in hidden_layer.into_iter().enumerate() {
+                let mut dendrites = vec![];
                 for input_neuron in input_layer.into_iter() {
-                    neuron.activate(input_neuron.transmission());
+                    dendrites.push(input_neuron.borrow_dendrite(index))
                 }
+                neuron.activate(&mut dendrites);
             }
             input_layer = hidden_layer;
         }

@@ -20,7 +20,7 @@ impl Neuron {
         }
     }
 
-    pub fn activate(&mut self, other_dendrites: &mut Vec<Dendrite>) -> Option<Signal> {
+    pub fn activate(&mut self, other_dendrites: &mut Vec<&mut Dendrite>) -> Option<Signal> {
         Neuron::collect_signals(&mut self.axon_terminals, other_dendrites);
         match self.axon.consume_signal() {
             Some(signal) => {
@@ -31,13 +31,13 @@ impl Neuron {
         }
     }
 
-    pub fn transmission(&mut self) -> &mut Vec<Dendrite> {
-        &mut self.dendrites
+    pub fn borrow_dendrite(&mut self, index: usize) -> &mut Dendrite {
+        &mut self.dendrites[index]
     }
 
     fn collect_signals(
         axon_terminals: &mut Vec<AxonTerminal>,
-        other_dendrites: &mut Vec<Dendrite>,
+        other_dendrites: &mut Vec<&mut Dendrite>,
     ) {
         for (other_dendrite, axon_terminal) in
             other_dendrites.iter_mut().zip(axon_terminals.iter_mut())
