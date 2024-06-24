@@ -47,6 +47,14 @@ impl Neuron {
             }
         }
     }
+
+    pub fn learn(&mut self, loss: f64) {
+        // we need actual calculation
+        let weight = loss;
+        for dendrite in &mut self.dendrites {
+            dendrite.set_weight(weight)
+        }
+    }
 }
 
 impl Default for Neuron {

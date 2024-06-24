@@ -1,18 +1,20 @@
 use crate::{neural_layer::NeuralLayer, neuron::Neuron};
 
 pub struct NeuralNetwork {
-    hidden_layers: Vec<NeuralLayer>,
     pub input_layer: NeuralLayer,
-    expectation: f64,
-    result: f64,
+    hidden_layers: Vec<NeuralLayer>,
+    pub output_layer: NeuralLayer,
+    expectation: Vec<f64>,
+    result: Vec<f64>,
 }
 impl NeuralNetwork {
     pub fn new() -> Self {
         NeuralNetwork {
-            hidden_layers: vec![],
             input_layer: NeuralLayer::new(),
-            expectation: 0.0,
-            result: 0.0,
+            hidden_layers: vec![],
+            output_layer: NeuralLayer::new(),
+            expectation: vec![],
+            result: vec![],
         }
     }
     pub fn create_neurons(&mut self, neuron_capacity: u128, neural_layer_capacity: u128) {
@@ -49,8 +51,12 @@ impl NeuralNetwork {
     }
 
     fn backward(&mut self) {
-        let loss = self.expectation - self.result;
-        println!("{}", loss);
+        let mut losses = vec![];
+        for (result, expectation) in self.result.iter().zip(&self.expectation) {
+            let loss = (result - expectation).powi(2);
+            losses.push(loss);
+        }
+        todo!();
     }
 }
 
