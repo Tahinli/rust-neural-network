@@ -18,7 +18,7 @@ impl Soma {
     pub fn activate(&mut self, signal: Signal) {
         let signal_value = signal.get_signal_value();
         self.signal = Some(Signal::new_with_value(
-            E.powf(signal_value) / (1.0 + E.powf(signal_value)) + self.bias,
+            (1.0/1.0+E.powf(-1.0 * signal_value)) + self.bias,
         ));
     }
 
