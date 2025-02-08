@@ -1,45 +1,5 @@
-use std::f64::consts::E;
-
-use crate::signal::Signal;
-
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Soma {
-    signal: Option<Signal>,
+    value: f64,
     bias: f64,
-}
-
-impl Soma {
-    pub fn new() -> Self {
-        Soma {
-            signal: None,
-            bias: 0.0,
-        }
-    }
-    pub fn activate(&mut self, signal: Signal) {
-        let signal_value = signal.get_signal_value();
-        self.signal = Some(Signal::new_with_value(
-            (1.0/1.0+E.powf(-1.0 * signal_value)) + self.bias,
-        ));
-    }
-
-    pub fn consume_signal(&mut self) -> Option<Signal> {
-        match &mut self.signal {
-            Some(signal) => {
-                let signal = Signal::new_with_value(signal.get_signal_value());
-                self.signal = None;
-                Some(signal)
-            }
-            None => None,
-        }
-    }
-
-    pub fn set_bias(&mut self, bias: f64) {
-        self.bias = bias;
-    }
-}
-
-impl Default for Soma {
-    fn default() -> Self {
-        Self::new()
-    }
 }
