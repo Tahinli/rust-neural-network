@@ -48,6 +48,10 @@ impl NeuralNetwork {
 
     fn backward(&mut self) {
         let loss = self.expectation - self.result;
-        todo!()
+        for hidden_layer in self.hidden_layers.iter_mut() {
+            for neuron in hidden_layer.iter_mut() {
+                neuron.recalculate_coefficients(loss);
+            }
+        }
     }
 }
