@@ -1,47 +1,32 @@
-use crate::neuron::Neuron;
-struct NeuralLine {
-    neural_line: Vec<Neuron>,
-}
-
-impl NeuralLine {
-    fn new() -> Self {
-        NeuralLine {
-            neural_line: vec![],
-        }
-    }
-
-    fn push_neuron(&mut self, neuron: Neuron) {
-        self.neural_line.push(neuron);
-    }
-}
+use crate::{neural_layer::NeuralLayer, neuron::Neuron};
 
 pub struct NeuralNetwork {
-    neurons: Vec<NeuralLine>,
-    pub input: f64,
+    hidden_layers: Vec<NeuralLayer>,
+    pub input_layer: NeuralLayer,
     expectation: f64,
     result: f64,
 }
 impl NeuralNetwork {
     pub fn new() -> Self {
         NeuralNetwork {
-            neurons: vec![],
-            input: 0.0,
+            hidden_layers: vec![],
+            input_layer: NeuralLayer::new(),
             expectation: 0.0,
             result: 0.0,
         }
     }
-    pub fn create_neurons(&mut self, neuron_capacity: u128, neuron_line_capacity: u128) {
-        self.neurons.clear();
-        for _ in 0..neuron_line_capacity {
-            let mut neural_line = NeuralLine::new();
+    pub fn create_neurons(&mut self, neuron_capacity: u128, neural_layer_capacity: u128) {
+        self.hidden_layers.clear();
+        for _ in 0..neural_layer_capacity {
+            let mut neural_layer = NeuralLayer::new();
             for _ in 0..neuron_capacity {
-                neural_line.push_neuron(Neuron::new());
+                neural_layer.push_neuron(Neuron::new());
             }
-            self.push_neuron_line(neural_line);
+            self.push_neural_layer(neural_layer);
         }
     }
-    fn push_neuron_line(&mut self, neuron_line: NeuralLine) {
-        self.neurons.push(neuron_line);
+    fn push_neural_layer(&mut self, neural_layer: NeuralLayer) {
+        self.hidden_layers.push(neural_layer);
     }
 
     pub fn run(&mut self) {
@@ -50,8 +35,15 @@ impl NeuralNetwork {
     }
 
     fn forward(&mut self) {
-        let mut input = self.input;
-        todo!()
+        let mut input_layer = &self.input_layer;
+        for hidden_layer in self.hidden_layers.iter_mut() {
+            for neuron in hidden_layer.iter_mut() {
+                for input_neuron in input_layer.iter() {
+                    neuron.use_electro_signal(input_neuron.get_signal())
+                }
+            }
+            input_layer = hidden_layer;
+        }
     }
 
     fn backward(&mut self) {

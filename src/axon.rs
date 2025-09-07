@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Axon {
     weight: f64,
     bias: f64,
@@ -23,8 +24,8 @@ impl Axon {
         self.bias = bias;
     }
 
-    pub fn transmit(&self, variable: f64) -> f64 {
-        self.weight * variable + self.bias
+    pub fn transmit(&self, input: f64) -> f64 {
+        self.weight * input + self.bias
     }
 
     pub fn set_weight(&mut self, weight: f64) {
