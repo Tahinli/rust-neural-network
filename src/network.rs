@@ -35,11 +35,11 @@ impl NeuralNetwork {
     }
 
     fn forward(&mut self) {
-        let mut input_layer = &self.input_layer;
+        let mut input_layer = &mut self.input_layer;
         for hidden_layer in self.hidden_layers.iter_mut() {
             for neuron in hidden_layer.into_iter() {
-                for input_neuron in input_layer {
-                    neuron.collect_electro_signal(input_neuron.get_signal())
+                for input_neuron in input_layer.into_iter() {
+                    neuron.activate(input_neuron.transmission());
                 }
             }
             input_layer = hidden_layer;
@@ -48,10 +48,6 @@ impl NeuralNetwork {
 
     fn backward(&mut self) {
         let loss = self.expectation - self.result;
-        for hidden_layer in self.hidden_layers.iter_mut() {
-            for neuron in hidden_layer {
-                neuron.recalculate_coefficients(loss);
-            }
-        }
+        println!("{}", loss);
     }
 }
