@@ -1,4 +1,9 @@
-pub mod axon;
-pub mod dendrite;
+use std::sync::LazyLock;
+
 pub mod neuron;
-pub mod soma;
+
+pub static LEARNING_RATE: LazyLock<f64> = LazyLock::new(set_learning_rate);
+
+fn set_learning_rate() -> f64 {
+    1.0
+}
