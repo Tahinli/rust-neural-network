@@ -53,3 +53,9 @@ impl NeuralNetwork {
         println!("{}", loss);
     }
 }
+
+impl Default for NeuralNetwork {
+    fn default() -> Self {
+        Self::new()
+    }
+}
